@@ -1,0 +1,65 @@
+import java.util.Scanner;
+
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        int rows = board.length;
+        int cols = board[0].length;
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == word.charAt(0) && dfs(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int i, int j, int index) {
+        if (index == word.length()) {
+            return true;
+        }
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] != word.charAt(index)) {
+            return false;
+        }
+        
+        char temp = board[i][j];
+        board[i][j] = ' ';  
+        
+        boolean found = dfs(board, word, i + 1, j, index + 1) ||
+                        dfs(board, word, i - 1, j, index + 1) ||
+                        dfs(board, word, i, j + 1, index + 1) ||
+                        dfs(board, word, i, j - 1, index + 1);
+        
+        board[i][j] = temp;  
+        return found;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter the number of rows:");
+        int rows = scanner.nextInt();
+        
+        System.out.println("Enter the number of columns:");
+        int cols = scanner.nextInt();
+        
+        char[][] board = new char[rows][cols];
+        System.out.println("Enter the board characters row by row:");
+        for (int i = 0; i < rows; i++) {
+            String row = scanner.next();
+            for (int j = 0; j < cols; j++) {
+                board[i][j] = row.charAt(j);
+            }
+        }
+        
+        System.out.println("Enter the word to search:");
+        String word = scanner.next();
+        
+        Solution solution = new Solution();
+        boolean result = solution.exist(board, word);
+        System.out.println("Word exists in the board: " + result);
+        
+        scanner.close();
+    }
+}

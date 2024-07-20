@@ -1,0 +1,45 @@
+import java.util.Scanner;
+
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        int n = cardPoints.length;
+        int totalSum = 0;
+        
+        // Calculate the total sum of the first k cards
+        for (int i = 0; i < k; i++) {
+            totalSum += cardPoints[i];
+        }
+        
+        int maxScore = totalSum;
+        
+        // Slide the window from the end to start
+        for (int i = 0; i < k; i++) {
+            totalSum = totalSum - cardPoints[k - 1 - i] + cardPoints[n - 1 - i];
+            maxScore = Math.max(maxScore, totalSum);
+        }
+        
+        return maxScore;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter the number of cards:");
+        int n = scanner.nextInt();
+        
+        int[] cardPoints = new int[n];
+        System.out.println("Enter the card points:");
+        for (int i = 0; i < n; i++) {
+            cardPoints[i] = scanner.nextInt();
+        }
+        
+        System.out.println("Enter the number of cards to take (k):");
+        int k = scanner.nextInt();
+        
+        Solution solution = new Solution();
+        int result = solution.maxScore(cardPoints, k);
+        System.out.println("Maximum score you can obtain: " + result);
+        
+        scanner.close();
+    }
+}

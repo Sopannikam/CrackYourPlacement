@@ -1,0 +1,50 @@
+import java.util.*;
+
+class RandomizedCollection {
+    private Map<Integer, Set<Integer>> map;  
+    private List<Integer> list;             
+
+    public RandomizedCollection() {
+        map = new HashMap<>();
+        list = new ArrayList<>();
+    }
+    
+    public boolean insert(int val) {
+        boolean notPresent = !map.containsKey(val);
+        if (notPresent) {
+            map.put(val, new HashSet<>());
+        }
+        map.get(val).add(list.size());
+        list.add(val);
+        return notPresent;
+    }
+    
+    public boolean remove(int val) {
+        boolean present = map.containsKey(val);
+        if (present) {
+           
+            int index = map.get(val).iterator().next();
+            map.get(val).remove(index);
+            if (map.get(val).isEmpty()) {
+                map.remove(val);
+            }
+
+            
+            if (index < list.size() - 1) {
+                int lastElement = list.get(list.size() - 1);
+                list.set(index, lastElement);
+                map.get(lastElement).remove(list.size() - 1);
+                map.get(lastElement).add(index);
+            }
+            
+            list.remove(list.size() - 1);
+        }
+        return present;
+    }
+    
+    public int getRandom() {
+        Random rand = new Random();
+        return list.get(rand.nextInt(list.size()));
+    }
+}
+

@@ -1,0 +1,57 @@
+class Solution {
+    static ArrayList<ArrayList<Integer>> uniquePerms(ArrayList<Integer> arr, int n) {
+        ArrayList<ArrayList<Integer>> results = new ArrayList<>();
+        Collections.sort(arr); // Sort the array to handle duplicates
+        backtrack(arr, new boolean[n], new ArrayList<>(), results);
+        return results;
+    }
+
+    private static void backtrack(ArrayList<Integer> arr, boolean[] used, List<Integer> current, ArrayList<ArrayList<Integer>> results) {
+        if (current.size() == arr.size()) {
+            results.add(new ArrayList<>(current));
+            return;
+        }
+
+        for (int i = 0; i < arr.size(); i++) {
+            // Skip used elements and duplicates
+            if (used[i] || (i > 0 && arr.get(i).equals(arr.get(i - 1)) && !used[i - 1])) {
+                continue;
+            }
+            used[i] = true;
+            current.add(arr.get(i));
+            backtrack(arr, used, current, results);
+            // Backtrack
+            used[i] = false;
+            current.remove(current.size() - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Read the number of elements in the array
+        System.out.println("Enter the number of elements:");
+        int n = scanner.nextInt();
+        
+        // Read the elements of the array
+        ArrayList<Integer> arr = new ArrayList<>();
+        System.out.println("Enter the elements:");
+        for (int i = 0; i < n; i++) {
+            arr.add(scanner.nextInt());
+        }
+        
+        // Generate unique permutations
+        ArrayList<ArrayList<Integer>> result = uniquePerms(arr, n);
+        
+        // Print the unique permutations
+        System.out.println("Unique permutations are:");
+        for (ArrayList<Integer> perm : result) {
+            for (int num : perm) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+        
+        scanner.close();
+    }
+}

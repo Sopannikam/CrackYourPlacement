@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Solution {
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        
+        Deque<Integer> deque = new LinkedList<>();
+        int maxValue = Integer.MIN_VALUE;
+        
+        for (int j = 0; j < points.length; j++) {
+            
+            while (!deque.isEmpty() && points[j][0] - points[deque.peekFirst()][0] > k) {
+                deque.pollFirst();
+            }
+            
+          
+            if (!deque.isEmpty()) {
+                int i = deque.peekFirst();
+                maxValue = Math.max(maxValue, points[j][1] + points[i][1] + points[j][0] - points[i][0]);
+            }
+            
+         
+            while (!deque.isEmpty() && points[deque.peekLast()][1] - points[deque.peekLast()][0] <= points[j][1] - points[j][0]) {
+                deque.pollLast();
+            }
+            
+            deque.offerLast(j);
+        }
+        
+        return maxValue;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the number of points:");
+        int n = scanner.nextInt();
+
+       
+        int[][] points = new int[n][2];
+        System.out.println("Enter the points (x and y values):");
+        for (int i = 0; i < n; i++) {
+            points[i][0] = scanner.nextInt();
+            points[i][1] = scanner.nextInt();
+        }
+
+        System.out.println("Enter the value of k:");
+        int k = scanner.nextInt();
+
+        Solution solution = new Solution();
+        int result = solution.findMaxValueOfEquation(points, k);
+
+     
+        System.out.println("Maximum value of the equation is: " + result);
+
+        scanner.close();
+    }
+}

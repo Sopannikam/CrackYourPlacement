@@ -1,23 +1,53 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
 class Solution {
-public:
-    long long findMinDiff(vector<long long> a, long long n, long long m) {
-        // If number of students is greater than number of packets, return -1
+    public long findMinDiff(long[] a, long n, long m) {
+        
         if (m > n) {
-            return -1; // Invalid case
+            return -1; // or handle the error as required
         }
         
-        // Sort the array
-        sort(a.begin(), a.end());
+        Arrays.sort(a);
         
-        // Initialize the minimum difference to a large value
-        long long minDiff = LLONG_MAX;
+        
+        long minDiff = Long.MAX_VALUE;
         
         // Slide the window of size m over the sorted array to find the minimum difference
-        for (long long i = 0; i + m - 1 < n; ++i) {
-            long long currentDiff = a[i + m - 1] - a[i];
-            minDiff = min(minDiff, currentDiff);
+        for (int i = 0; i + (int)m - 1 < n; ++i) {
+            long currentDiff = a[i + (int)m - 1] - a[i];
+            minDiff = Math.min(minDiff, currentDiff);
         }
         
         return minDiff;
     }
-};
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+      
+        System.out.println("Enter the number of packets (N) and number of students (M):");
+        long n = scanner.nextLong();
+        long m = scanner.nextLong();
+        
+      
+        long[] a = new long[(int)n];
+        System.out.println("Enter the number of chocolates in each packet:");
+        for (int i = 0; i < n; i++) {
+            a[i] = scanner.nextLong();
+        }
+        
+       
+        Solution solution = new Solution();
+        long result = solution.findMinDiff(a, n, m);
+        
+    
+        if (result == -1) {
+            System.out.println("Invalid input: More students than packets.");
+        } else {
+            System.out.println("Minimum difference is: " + result);
+        }
+        
+        scanner.close();
+    }
+}

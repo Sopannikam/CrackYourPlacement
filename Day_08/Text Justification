@@ -1,0 +1,84 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+        int index = 0;
+        
+        while (index < words.length) {
+            // Find the range of words that fit into the current line
+            int totalChars = words[index].length();
+            int last = index + 1;
+            
+            while (last < words.length) {
+                if (totalChars + 1 + words[last].length() > maxWidth) break;
+                totalChars += 1 + words[last].length();
+                last++;
+            }
+            
+            StringBuilder line = new StringBuilder();
+            int numberOfWords = last - index;
+            int numberOfSpaces = maxWidth - totalChars + (numberOfWords - 1);
+            
+            // Build the line
+            if (last == words.length || numberOfWords == 1) {
+                for (int i = index; i < last; i++) {
+                    line.append(words[i]);
+                    if (i < last - 1) {
+                        line.append(" ");
+                    }
+                }
+                while (line.length() < maxWidth) {
+                    line.append(" ");
+                }
+            } else {
+                int spacesBetweenWords = numberOfSpaces / (numberOfWords - 1);
+                int extraSpaces = numberOfSpaces % (numberOfWords - 1);
+                
+                for (int i = index; i < last; i++) {
+                    line.append(words[i]);
+                    if (i < last - 1) {
+                        for (int j = 0; j < spacesBetweenWords; j++) {
+                            line.append(" ");
+                        }
+                        if (extraSpaces > 0) {
+                            line.append(" ");
+                            extraSpaces--;
+                        }
+                    }
+                }
+            }
+            
+            result.add(line.toString());
+            index = last;
+        }
+        
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Read the array of words
+        System.out.println("Enter the words (separated by spaces):");
+        String input = sc.nextLine();
+        String[] words = input.split(" ");
+
+        // Read the maxWidth
+        System.out.println("Enter the max width:");
+        int maxWidth = sc.nextInt();
+
+        Solution sol = new Solution();
+        List<String> result = sol.fullJustify(words, maxWidth);
+
+        // Output the result
+        System.out.println("Formatted text:");
+        for (String line : result) {
+            System.out.println("\"" + line + "\"");
+        }
+
+        sc.close();
+    }
+}

@@ -1,0 +1,45 @@
+import java.util.*;
+
+class Solution {
+    public String simplifyPath(String path) {
+        // Use a stack to store valid path components
+        Stack<String> stack = new Stack<>();
+
+        // Split the input path by '/'
+        String[] components = path.split("/");
+
+        for (String component : components) {
+            if (component.equals("") || component.equals(".")) {
+                // Ignore empty components and current directory '.'
+                continue;
+            } else if (component.equals("..")) {
+                // Go up one level unless stack is empty
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else {
+                // Push valid directory names onto the stack
+                stack.push(component);
+            }
+        }
+
+        // Construct the canonical path
+        StringBuilder result = new StringBuilder();
+        for (String dir : stack) {
+            result.append("/").append(dir);
+        }
+
+        // If the result is empty, return the root "/"
+        return result.length() > 0 ? result.toString() : "/";
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the path:");
+        String path = sc.nextLine();
+
+        Solution sol = new Solution();
+        String simplifiedPath = sol.simplifyPath(path);
+        System.out.println("Simplified Path: " + simplifiedPath);
+    }
+}

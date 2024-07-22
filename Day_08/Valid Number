@@ -1,0 +1,19 @@
+import java.util.Scanner;
+
+class Solution {
+    public boolean isNumber(String s) {
+        // Regular expression for a valid number
+        String regex = "^[+-]?((\\d+\\.?\\d*)|(\\.\\d+))(e[+-]?\\d+)?$";
+        return s.toLowerCase().matches(regex);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the string:");
+        String s = sc.nextLine();
+        
+        Solution sol = new Solution();
+        boolean result = sol.isNumber(s);
+        System.out.println("Is valid number: " + result);
+    }
+}

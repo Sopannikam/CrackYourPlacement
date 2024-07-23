@@ -1,0 +1,56 @@
+public static String smallestWindow(String S, String P) {
+ 
+        if (S == null || P == null || S.length() < P.length()) {
+            return "-1";
+        }
+        Map<Character, Integer> patternMap = new HashMap<>();
+        for (char c : P.toCharArray()) {
+            patternMap.put(c, patternMap.getOrDefault(c, 0) + 1);
+        }
+
+        int start = 0, minLength = Integer.MAX_VALUE, minStart = 0;
+        int matched = 0;
+        Map<Character, Integer> windowMap = new HashMap<>();
+
+        for (int end = 0; end < S.length(); end++) {
+            char endChar = S.charAt(end);
+            windowMap.put(endChar, windowMap.getOrDefault(endChar, 0) + 1);
+
+            if (patternMap.containsKey(endChar) && windowMap.get(endChar).intValue() <= patternMap.get(endChar).intValue()) {
+                matched++;
+            }
+
+            while (matched == P.length()) {
+                if (end - start + 1 < minLength) {
+                    minLength = end - start + 1;
+                    minStart = start;
+                }
+
+                char startChar = S.charAt(start);
+                windowMap.put(startChar, windowMap.get(startChar) - 1);
+
+                if (patternMap.containsKey(startChar) && windowMap.get(startChar).intValue() < patternMap.get(startChar).intValue()) {
+                    matched--;
+                }
+
+                start++;
+            }
+        }
+
+        return minLength == Integer.MAX_VALUE ? "-1" : S.substring(minStart, minStart + minLength);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the string S:");
+        String S = scanner.nextLine();
+        
+        System.out.println("Enter the string P:");
+        String P = scanner.nextLine();
+
+        System.out.println("The smallest window is: " + smallestWindow(S, P));
+
+        scanner.close();
+    }
+}

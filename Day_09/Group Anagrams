@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        
+        for (String str : strs) {
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String sortedStr = new String(charArray);
+            
+            if (!map.containsKey(sortedStr)) {
+                map.put(sortedStr, new ArrayList<>());
+            }
+            
+            map.get(sortedStr).add(str);
+        }
+        
+        return new ArrayList<>(map.values());
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the array of strings (comma separated):");
+        String input = scanner.nextLine();
+        String[] strs = input.split(",\\s*");
+
+        Solution solution = new Solution();
+        List<List<String>> result = solution.groupAnagrams(strs);
+        
+        System.out.println("Grouped anagrams:");
+        for (List<String> group : result) {
+            System.out.println(group);
+        }
+        
+        scanner.close();
+    }
+}

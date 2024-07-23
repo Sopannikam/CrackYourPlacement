@@ -1,0 +1,64 @@
+  public static int solveWordWrap(int[] nums, int k) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        int[][] cost = new int[n][n];
+
+        // Initialize the cost matrix
+        for (int i = 0; i < n; i++) {
+            cost[i][i] = k - nums[i];
+            for (int j = i + 1; j < n; j++) {
+                cost[i][j] = cost[i][j - 1] - nums[j] - 1;
+            }
+        }
+
+        // Convert extra spaces to the cost of lines
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (cost[i][j] < 0) {
+                    cost[i][j] = Integer.MAX_VALUE;
+                } else if (j == n - 1 && cost[i][j] >= 0) {
+                    cost[i][j] = 0; // No extra cost for the last line
+                } else {
+                    cost[i][j] = cost[i][j] * cost[i][j];
+                }
+            }
+        }
+
+        // Calculate minimum cost using dp
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = cost[i][n - 1];
+            for (int j = n - 1; j > i; j--) {
+                if (cost[i][j - 1] != Integer.MAX_VALUE) {
+                    dp[i] = Math.min(dp[i], cost[i][j - 1] + dp[j]);
+                }
+            }
+        }
+
+        return dp[0];
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read input for the array nums
+        System.out.println("Enter the number of words:");
+        int n = scanner.nextInt();
+        int[] nums = new int[n];
+        
+        System.out.println("Enter the lengths of the words:");
+        for (int i = 0; i < n; i++) {
+            nums[i] = scanner.nextInt();
+        }
+
+        // Read input for the line width k
+        System.out.println("Enter the line width k:");
+        int k = scanner.nextInt();
+
+        // Call the function and print the result
+        int result = solveWordWrap(nums, k);
+        System.out.println("The minimum total cost is: " + result);
+
+        // Close the scanner
+        scanner.close();
+    }
+}

@@ -1,0 +1,66 @@
+import java.util.Scanner;
+
+class Solution {
+    public static int splitArray(int[] nums, int k) {
+        int left = 0;
+        int right = 0;
+        
+        
+        for (int num : nums) {
+            left = Math.max(left, num); 
+            right += num;                
+        }
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (canSplit(nums, k, mid)) {
+                right = mid;  
+            } else {
+                left = mid + 1;  
+            }
+        }
+        
+        return left;  
+    }
+    
+    private static boolean canSplit(int[] nums, int k, int maxSum) {
+        int currentSum = 0;
+        int requiredSubarrays = 1;  
+        
+        for (int num : nums) {
+            if (currentSum + num > maxSum) {
+                requiredSubarrays++;
+                currentSum = num;
+                if (requiredSubarrays > k) {
+                    return false;  
+                }
+            } else {
+                currentSum += num;
+            }
+        }
+        
+        return true;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the number of elements in the array:");
+        int n = scanner.nextInt();
+
+        int[] nums = new int[n];
+        System.out.println("Enter the elements of the array:");
+        for (int i = 0; i < n; i++) {
+            nums[i] = scanner.nextInt();
+        }
+
+        System.out.println("Enter the number of subarrays (k):");
+        int k = scanner.nextInt();
+    
+        int result = splitArray(nums, k);
+
+        System.out.println("The minimized largest sum of the split is: " + result);
+
+        scanner.close();
+    }
+}

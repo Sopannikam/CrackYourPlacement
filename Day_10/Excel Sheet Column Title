@@ -1,0 +1,30 @@
+import java.util.Scanner;
+
+public class Solution {
+    public String convertToTitle(int columnNumber) {
+        StringBuilder columnTitle = new StringBuilder();
+        
+        while (columnNumber > 0) {
+            columnNumber--;  
+            int remainder = columnNumber % 26;
+            char ch = (char) (remainder + 'A');
+            columnTitle.append(ch);
+            columnNumber /= 26;
+        }
+        
+        return columnTitle.reverse().toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Solution solution = new Solution();
+        
+        System.out.println("Enter the column number: ");
+        int columnNumber = scanner.nextInt();
+        
+        String columnTitle = solution.convertToTitle(columnNumber);
+        System.out.println("The corresponding column title is: " + columnTitle);
+        
+        scanner.close();
+    }
+}

@@ -1,0 +1,79 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class MyStack {
+    private Queue<Integer> queue1;
+    private Queue<Integer> queue2;
+    private int topElement;
+
+    public MyStack() {
+        queue1 = new LinkedList<>();
+        queue2 = new LinkedList<>();
+    }
+    
+    public void push(int x) {
+        queue1.add(x);
+        topElement = x;
+    }
+    
+    public int pop() {
+        while (queue1.size() > 1) {
+            topElement = queue1.remove();
+            queue2.add(topElement);
+        }
+
+        int poppedElement = queue1.remove();
+
+        // Swap queue1 and queue2
+        Queue<Integer> temp = queue1;
+        queue1 = queue2;
+        queue2 = temp;
+
+        return poppedElement;
+    }
+    
+    public int top() {
+        return topElement;
+    }
+    
+    public boolean empty() {
+        return queue1.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        MyStack myStack = new MyStack();
+        
+        while (true) {
+            System.out.println("Choose operation: push, pop, top, empty, exit");
+            String operation = scanner.next();
+            
+            if (operation.equals("push")) {
+                System.out.println("Enter value to push:");
+                int value = scanner.nextInt();
+                myStack.push(value);
+            } else if (operation.equals("pop")) {
+                if (!myStack.empty()) {
+                    System.out.println("Popped value: " + myStack.pop());
+                } else {
+                    System.out.println("Stack is empty!");
+                }
+            } else if (operation.equals("top")) {
+                if (!myStack.empty()) {
+                    System.out.println("Top value: " + myStack.top());
+                } else {
+                    System.out.println("Stack is empty!");
+                }
+            } else if (operation.equals("empty")) {
+                System.out.println("Is stack empty? " + myStack.empty());
+            } else if (operation.equals("exit")) {
+                break;
+            } else {
+                System.out.println("Invalid operation. Try again.");
+            }
+        }
+
+        scanner.close();
+    }
+}

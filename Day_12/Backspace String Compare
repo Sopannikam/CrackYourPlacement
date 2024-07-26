@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        return buildString(s).equals(buildString(t));
+    }
+
+    private String buildString(String str) {
+        StringBuilder result = new StringBuilder();
+        for (char ch : str.toCharArray()) {
+            if (ch != '#') {
+                result.append(ch);
+            } else if (result.length() > 0) {
+                result.deleteCharAt(result.length() - 1);
+            }
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Solution solution = new Solution();
+        
+        System.out.println("Enter the first string (s):");
+        String s = scanner.nextLine();
+        
+        System.out.println("Enter the second string (t):");
+        String t = scanner.nextLine();
+        
+        boolean result = solution.backspaceCompare(s, t);
+        System.out.println("Are the strings equal after backspacing? " + result);
+
+        scanner.close();
+    }
+}

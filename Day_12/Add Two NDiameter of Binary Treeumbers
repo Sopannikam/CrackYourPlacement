@@ -1,0 +1,103 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+public class Solution {
+    private int diameter;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        diameter = 0;
+        dfs(root);
+        return diameter;
+    }
+
+    private int dfs(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        int leftHeight = dfs(node.left);
+        int rightHeight = dfs(node.right);
+        
+        diameter = Math.max(diameter, leftHeight + rightHeight);
+        
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    private static TreeNode buildTree(String input) {
+        if (input == null || input.isEmpty()) {
+            return null;
+        }
+        
+        String[] nodes = input.split(",");
+        if (nodes.length == 0) {
+            return null;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        queue.add(root);
+        
+        int i = 1;
+        while (i < nodes.length) {
+            TreeNode current = queue.poll();
+            
+            if (!nodes[i].equals("null")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+      
+            if (i < nodes.length && !nodes[i].equals("null")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        
+        return root;
+    }
+
+
+    private static void printTree(TreeNode root) {
+        if (root == null) {
+            System.out.println("The tree is empty.");
+            return;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node != null) {
+                System.out.print(node.val + " ");
+                queue.add(node.left);
+                queue.add(node.right);
+            } else {
+                System.out.print("null ");
+            }
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the binary tree nodes in level-order, separated by commas (use 'null' for missing nodes):");
+        String input = scanner.nextLine();
+        TreeNode root = buildTree(input);
+
+        Solution solution = new Solution();
+        int diameter = solution.diameterOfBinaryTree(root);
+
+        System.out.println("Diameter of the tree: " + diameter);
+
+        scanner.close();
+    }
+}

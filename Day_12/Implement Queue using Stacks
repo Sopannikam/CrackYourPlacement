@@ -1,0 +1,74 @@
+import java.util.Stack;
+import java.util.Scanner;
+
+class MyQueue {
+    private Stack<Integer> stack1;
+    private Stack<Integer> stack2;
+
+    public MyQueue() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    public void push(int x) {
+        stack1.push(x);
+    }
+
+    public int pop() {
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.pop();
+    }
+
+    public int peek() {
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.peek();
+    }
+
+    public boolean empty() {
+        return stack1.isEmpty() && stack2.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        MyQueue myQueue = new MyQueue();
+        
+        while (true) {
+            System.out.println("Choose operation: push, pop, peek, empty, exit");
+            String operation = scanner.next();
+            
+            if (operation.equals("push")) {
+                System.out.println("Enter value to push:");
+                int value = scanner.nextInt();
+                myQueue.push(value);
+            } else if (operation.equals("pop")) {
+                if (!myQueue.empty()) {
+                    System.out.println("Popped value: " + myQueue.pop());
+                } else {
+                    System.out.println("Queue is empty!");
+                }
+            } else if (operation.equals("peek")) {
+                if (!myQueue.empty()) {
+                    System.out.println("Front value: " + myQueue.peek());
+                } else {
+                    System.out.println("Queue is empty!");
+                }
+            } else if (operation.equals("empty")) {
+                System.out.println("Is queue empty? " + myQueue.empty());
+            } else if (operation.equals("exit")) {
+                break;
+            } else {
+                System.out.println("Invalid operation. Try again.");
+            }
+        }
+
+        scanner.close();
+    }
+}

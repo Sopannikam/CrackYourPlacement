@@ -1,0 +1,109 @@
+import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+public class Solution {
+    
+    // Method to invert the binary tree
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        
+        // Swap the left and right children
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        
+        // Recursively invert the left and right subtrees
+        invertTree(root.left);
+        invertTree(root.right);
+        
+        return root;
+    }
+
+    // Helper method to build a binary tree from level-order input
+    private static TreeNode buildTree(String input) {
+        if (input == null || input.isEmpty()) {
+            return null;
+        }
+        
+        String[] nodes = input.split(",");
+        if (nodes.length == 0 || nodes[0].equals("null")) {
+            return null;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        queue.add(root);
+        
+        int i = 1;
+        while (i < nodes.length) {
+            TreeNode current = queue.poll();
+            
+            // Add left child
+            if (!nodes[i].equals("null")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+            
+            // Add right child
+            if (i < nodes.length && !nodes[i].equals("null")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        
+        return root;
+    }
+
+    // Helper method to print the binary tree in level-order
+    private static void printTree(TreeNode root) {
+        if (root == null) {
+            System.out.println("The tree is empty.");
+            return;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node != null) {
+                System.out.print(node.val + " ");
+                queue.add(node.left);
+                queue.add(node.right);
+            } else {
+                System.out.print("null ");
+            }
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input for binary tree (level-order traversal)
+        System.out.println("Enter the binary tree nodes in level-order, separated by commas (use 'null' for missing nodes):");
+        String input = scanner.nextLine();
+        TreeNode root = buildTree(input);
+
+        Solution solution = new Solution();
+        TreeNode invertedRoot = solution.invertTree(root);
+
+        // Output the inverted tree
+        System.out.println("Inverted tree in level-order:");
+        printTree(invertedRoot);
+
+        scanner.close();
+    }
+}

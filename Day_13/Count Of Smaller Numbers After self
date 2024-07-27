@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        List<Integer> sortedList = new ArrayList<>();
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            int position = findPosition(sortedList, nums[i]);
+            result.add(position);
+            sortedList.add(position, nums[i]);
+        }
+
+        Collections.reverse(result);
+        return result;
+    }
+
+    private int findPosition(List<Integer> sortedList, int target) {
+        int left = 0;
+        int right = sortedList.size();
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (sortedList.get(mid) >= target) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] nums = {5, 2, 6, 1};
+        List<Integer> result = solution.countSmaller(nums);
+        System.out.println(result);  
+
+        nums = new int[]{-1};
+        result = solution.countSmaller(nums);
+        System.out.println(result);  
+
+        nums = new int[]{-1, -1};
+        result = solution.countSmaller(nums);
+        System.out.println(result);  
+    }
+}

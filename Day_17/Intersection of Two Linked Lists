@@ -1,0 +1,35 @@
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        // Find the lengths of both linked lists
+        int lenA = getLength(headA);
+        int lenB = getLength(headB);
+        
+        // Align the start of both lists
+        while (lenA > lenB) {
+            headA = headA.next;
+            lenA--;
+        }
+        while (lenB > lenA) {
+            headB = headB.next;
+            lenB--;
+        }
+        
+        // Traverse both lists simultaneously
+        while (headA != headB) {
+            headA = headA.next;
+            headB = headB.next;
+        }
+        
+        // Return either the intersection node or null
+        return headA;
+    }
+    
+    private int getLength(ListNode head) {
+        int length = 0;
+        while (head != null) {
+            length++;
+            head = head.next;
+        }
+        return length;
+    }
+}

@@ -1,0 +1,24 @@
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // Start from the root of the tree
+        TreeNode currentNode = root;
+        
+        while (currentNode != null) {
+            // If both p and q are smaller than current node, LCA is in the left subtree
+            if (p.val < currentNode.val && q.val < currentNode.val) {
+                currentNode = currentNode.left;
+            } 
+            // If both p and q are greater than current node, LCA is in the right subtree
+            else if (p.val > currentNode.val && q.val > currentNode.val) {
+                currentNode = currentNode.right;
+            } 
+            // We have found the split point, i.e., the LCA node
+            else {
+                return currentNode;
+            }
+        }
+        
+        return null; 
+    }
+}

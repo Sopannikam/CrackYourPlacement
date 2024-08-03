@@ -1,0 +1,42 @@
+
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return checkBalance(root).isBalanced;
+    }
+
+    private BalanceStatusWithHeight checkBalance(TreeNode node) {
+        // Base case: An empty tree is balanced and has height -1
+        if (node == null) {
+            return new BalanceStatusWithHeight(true, -1);
+        }
+        
+        // Check balance of left subtree
+        BalanceStatusWithHeight leftResult = checkBalance(node.left);
+        if (!leftResult.isBalanced) {
+            return new BalanceStatusWithHeight(false, 0);
+        }
+        
+        // Check balance of right subtree
+        BalanceStatusWithHeight rightResult = checkBalance(node.right);
+        if (!rightResult.isBalanced) {
+            return new BalanceStatusWithHeight(false, 0);
+        }
+        
+        // Check the height difference between left and right subtrees
+        boolean isBalanced = Math.abs(leftResult.height - rightResult.height) <= 1;
+        int height = Math.max(leftResult.height, rightResult.height) + 1;
+        
+        return new BalanceStatusWithHeight(isBalanced, height);
+    }
+    
+    // Helper class to hold the balance status and height of a subtree
+    private static class BalanceStatusWithHeight {
+        public boolean isBalanced;
+        public int height;
+        
+        public BalanceStatusWithHeight(boolean isBalanced, int height) {
+            this.isBalanced = isBalanced;
+            this.height = height;
+        }
+    }
+}

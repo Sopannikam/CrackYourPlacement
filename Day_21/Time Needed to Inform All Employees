@@ -1,0 +1,29 @@
+import java.util.*;
+
+class Solution {
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        // Create an adjacency list to represent the tree
+        List<List<Integer>> tree = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            tree.add(new ArrayList<>());
+        }
+        
+        // Populate the adjacency list with manager-subordinate relationships
+        for (int i = 0; i < n; i++) {
+            if (manager[i] != -1) {
+                tree.get(manager[i]).add(i);
+            }
+        }
+        
+        // Use DFS to calculate the total inform time starting from the head
+        return dfs(tree, informTime, headID);
+    }
+    
+    private int dfs(List<List<Integer>> tree, int[] informTime, int current) {
+        int maxTime = 0;
+        for (int subordinate : tree.get(current)) {
+            maxTime = Math.max(maxTime, dfs(tree, informTime, subordinate));
+        }
+        return maxTime + informTime[current];
+    }
+}

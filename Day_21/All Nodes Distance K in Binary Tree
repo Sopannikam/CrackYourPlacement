@@ -1,0 +1,74 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+class Solution {
+    Map<TreeNode, TreeNode> parentMap = new HashMap<>();
+    List<Integer> result = new ArrayList<>();
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        if (root == null) return result;
+        
+        // Step 1: Create the parent mapping for each node
+        createParentMapping(root, null);
+        
+        // Step 2: Use BFS to find all nodes at distance k
+        bfs(target, k);
+        
+        return result;
+    }
+    
+    private void createParentMapping(TreeNode node, TreeNode parent) {
+        if (node != null) {
+            parentMap.put(node, parent);
+            createParentMapping(node.left, node);
+            createParentMapping(node.right, node);
+        }
+    }
+    
+    private void bfs(TreeNode target, int k) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        Set<TreeNode> visited = new HashSet<>();
+        queue.offer(target);
+        visited.add(target);
+        
+        int currentLevel = 0;
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            if (currentLevel == k) {
+                for (int i = 0; i < size; i++) {
+                    result.add(queue.poll().val);
+                }
+                return;
+            }
+            
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                
+                if (node.left != null && !visited.contains(node.left)) {
+                    queue.offer(node.left);
+                    visited.add(node.left);
+                }
+                
+                if (node.right != null && !visited.contains(node.right)) {
+                    queue.offer(node.right);
+                    visited.add(node.right);
+                }
+                
+                TreeNode parent = parentMap.get(node);
+                if (parent != null && !visited.contains(parent)) {
+                    queue.offer(parent);
+                    visited.add(parent);
+                }
+            }
+            
+            currentLevel++;
+        }
+    }
+}

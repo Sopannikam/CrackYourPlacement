@@ -1,0 +1,59 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int maxDistance(int[][] grid) {
+        int n = grid.length;
+        
+        // Check for the existence of at least one land and one water cell
+        boolean hasLand = false;
+        boolean hasWater = false;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    hasLand = true;
+                } else {
+                    hasWater = true;
+                }
+                if (hasLand && hasWater) {
+                    break;
+                }
+            }
+        }
+        
+        if (!hasLand || !hasWater) {
+            return -1;
+        }
+        
+        // Perform multi-source BFS from all land cells
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    queue.add(new int[]{i, j});
+                }
+            }
+        }
+        
+        int maxDistance = -1;
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            int x = cell[0], y = cell[1];
+            
+            for (int[] dir : directions) {
+                int newX = x + dir[0];
+                int newY = y + dir[1];
+                
+                if (newX >= 0 && newX < n && newY >= 0 && newY < n && grid[newX][newY] == 0) {
+                    grid[newX][newY] = grid[x][y] + 1; // Update distance
+                    maxDistance = Math.max(maxDistance, grid[newX][newY] - 1);
+                    queue.add(new int[]{newX, newY});
+                }
+            }
+        }
+        
+        return maxDistance;
+    }
+}

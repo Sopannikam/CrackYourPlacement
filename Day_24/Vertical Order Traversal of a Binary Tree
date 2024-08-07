@@ -1,0 +1,64 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int x) { val = x; }
+}
+
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        // A TreeMap to store the nodes based on columns
+        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
+        // A Queue to perform BFS
+        Queue<Tuple> queue = new LinkedList<>();
+        // Start with the root at row = 0, col = 0
+        queue.offer(new Tuple(root, 0, 0));
+        
+        while (!queue.isEmpty()) {
+            Tuple tuple = queue.poll();
+            TreeNode node = tuple.node;
+            int row = tuple.row, col = tuple.col;
+            
+            // Initialize column entry if not present
+            map.putIfAbsent(col, new TreeMap<>());
+            // Initialize row entry if not present
+            map.get(col).putIfAbsent(row, new PriorityQueue<>());
+            // Add node value to the respective column and row
+            map.get(col).get(row).offer(node.val);
+            
+            // Process left and right children with updated row and column
+            if (node.left != null) {
+                queue.offer(new Tuple(node.left, row + 1, col - 1));
+            }
+            if (node.right != null) {
+                queue.offer(new Tuple(node.right, row + 1, col + 1));
+            }
+        }
+        
+        // Prepare the result list
+        List<List<Integer>> result = new ArrayList<>();
+        for (TreeMap<Integer, PriorityQueue<Integer>> column : map.values()) {
+            List<Integer> columnList = new ArrayList<>();
+            for (PriorityQueue<Integer> nodes : column.values()) {
+                while (!nodes.isEmpty()) {
+                    columnList.add(nodes.poll());
+                }
+            }
+            result.add(columnList);
+        }
+        
+        return result;
+    }
+    
+    // Helper class to store the node along with its row and column
+    private class Tuple {
+        TreeNode node;
+        int row, col;
+        public Tuple(TreeNode node, int row, int col) {
+            this.node = node;
+            this.row = row;
+            this.col = col;
+        }
+    }
+}

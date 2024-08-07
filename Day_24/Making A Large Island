@@ -1,0 +1,65 @@
+import java.util.*;
+
+class Solution {
+    public int largestIsland(int[][] grid) {
+        int n = grid.length;
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        Map<Integer, Integer> islandSizeMap = new HashMap<>();
+        int islandIndex = 2;  // Start indexing islands from 2
+        int maxIslandSize = 0;
+
+        // Step 1: Identify and mark all islands
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    int size = dfs(grid, i, j, islandIndex, directions);
+                    islandSizeMap.put(islandIndex, size);
+                    maxIslandSize = Math.max(maxIslandSize, size);
+                    islandIndex++;
+                }
+            }
+        }
+
+        // Step 2: Check each 0 to calculate the potential max island size
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    Set<Integer> neighborIslands = new HashSet<>();
+                    int potentialIslandSize = 1;  // The current 0 to 1
+                    for (int[] dir : directions) {
+                        int ni = i + dir[0];
+                        int nj = j + dir[1];
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] > 1) {
+                            int islandId = grid[ni][nj];
+                            if (neighborIslands.add(islandId)) {
+                                potentialIslandSize += islandSizeMap.get(islandId);
+                            }
+                        }
+                    }
+                    maxIslandSize = Math.max(maxIslandSize, potentialIslandSize);
+                }
+            }
+        }
+
+        // Step 3: Handle the case where there are no 0's in the grid
+        if (maxIslandSize == 0 && islandIndex == 2) {
+            return n * n;
+        }
+
+        return maxIslandSize;
+    }
+
+    private int dfs(int[][] grid, int i, int j, int islandIndex, int[][] directions) {
+        int n = grid.length;
+        grid[i][j] = islandIndex;
+        int size = 1;
+        for (int[] dir : directions) {
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+            if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] == 1) {
+                size += dfs(grid, ni, nj, islandIndex, directions);
+            }
+        }
+        return size;
+    }
+}

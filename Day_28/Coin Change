@@ -1,0 +1,26 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        // Initialize dp array where dp[i] means the minimum number of coins to make amount i
+        int[] dp = new int[amount + 1];
+        
+        // Fill dp array with a large value. We use amount + 1 as a large value since we cannot have more than amount coins
+        Arrays.fill(dp, amount + 1);
+        
+        // Base case: No coins are needed to make amount 0
+        dp[0] = 0;
+        
+        // Iterate over all amounts from 1 to amount
+        for (int i = 1; i <= amount; i++) {
+            // Check each coin denomination
+            for (int coin : coins) {
+                // If the coin can be used to make up the amount
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        
+     
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}

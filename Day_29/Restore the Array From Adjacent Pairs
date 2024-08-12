@@ -1,0 +1,34 @@
+import java.util.*;
+
+class Solution {
+    public int[] restoreArray(int[][] adjacentPairs) {
+        // Step 1: Build the adjacency map
+        Map<Integer, List<Integer>> adjMap = new HashMap<>();
+        for (int[] pair : adjacentPairs) {
+            adjMap.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(pair[1]);
+            adjMap.computeIfAbsent(pair[1], k -> new ArrayList<>()).add(pair[0]);
+        }
+        
+        // Step 2: Find the starting point (an element with only one adjacent element)
+        int start = 0;
+        for (Map.Entry<Integer, List<Integer>> entry : adjMap.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                start = entry.getKey();
+                break;
+            }
+        }
+        
+        // Step 3: Reconstruct the array
+        int n = adjacentPairs.length + 1;
+        int[] result = new int[n];
+        result[0] = start;
+        
+        result[1] = adjMap.get(start).get(0);
+        for (int i = 2; i < n; i++) {
+            List<Integer> adj = adjMap.get(result[i - 1]);
+            result[i] = adj.get(0) == result[i - 2] ? adj.get(1) : adj.get(0);
+        }
+        
+        return result;
+    }
+}

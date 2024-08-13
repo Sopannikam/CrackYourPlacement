@@ -1,0 +1,29 @@
+class Solution {
+    public List<List<String>> Anagrams(String[] string_list) {
+        // Use LinkedHashMap to maintain the order of insertion
+        Map<String, List<String>> map = new LinkedHashMap<>();
+        
+        for (String str : string_list) {
+            // Convert string to character array and sort it
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String sortedStr = new String(charArray);
+            
+            // If the sorted string is not in the map, add it
+            if (!map.containsKey(sortedStr)) {
+                map.put(sortedStr, new ArrayList<>());
+            }
+            
+            // Add the original string to the corresponding listcx
+            map.get(sortedStr).add(str);
+        }
+        
+        // Create a list of lists to store the final grouped anagrams
+        List<List<String>> result = new ArrayList<>();
+        
+        // Add each group of anagrams to the result without sorting them lexicographically
+        result.addAll(map.values());
+        
+        return result;
+    }
+}

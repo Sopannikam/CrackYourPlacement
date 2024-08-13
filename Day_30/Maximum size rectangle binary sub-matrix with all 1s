@@ -1,0 +1,83 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class MaxRectangleInBinaryMatrix {
+
+    public int maximalRectangle(int[][] matrix) {
+        if (matrix.length == 0) return 0;
+        int maxArea = 0;
+        int[] heights = new int[matrix[0].length];
+        
+        for (int i = 0; i < matrix.length; i++) {
+            // Update the heights array based on the current row
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == 1) {
+                    heights[j] += 1;
+                } else {
+                    heights[j] = 0;
+                }
+            }
+            
+            // Calculate the maximum area for the histogram formed by the heights array
+            maxArea = Math.max(maxArea, largestRectangleArea(heights));
+        }
+        
+        return maxArea;
+    }
+
+    // Helper function to calculate the largest rectangle area in a histogram
+    private int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        int maxArea = 0;
+        int index = 0;
+        
+        while (index < heights.length) {
+            if (stack.isEmpty() || heights[stack.peek()] <= heights[index]) {
+                stack.push(index++);
+            } else {
+                int height = heights[stack.pop()];
+                int width = stack.isEmpty() ? index : index - stack.peek() - 1;
+                maxArea = Math.max(maxArea, height * width);
+            }
+        }
+        
+        while (!stack.isEmpty()) {
+            int height = heights[stack.pop()];
+            int width = stack.isEmpty() ? index : index - stack.peek() - 1;
+            maxArea = Math.max(maxArea, height * width);
+        }
+        
+        return maxArea;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Reading the matrix dimensions
+        System.out.println("Enter the number of rows:");
+        int rows = scanner.nextInt();
+        System.out.println("Enter the number of columns:");
+        int cols = scanner.nextInt();
+
+        // Initialize the matrix
+        int[][] matrix = new int[rows][cols];
+
+        // Reading the matrix values
+        System.out.println("Enter the binary matrix row by row:");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = scanner.nextInt();
+            }
+        }
+
+        // Create an object of MaxRectangleInBinaryMatrix and calculate the result
+        MaxRectangleInBinaryMatrix obj = new MaxRectangleInBinaryMatrix();
+        int result = obj.maximalRectangle(matrix);
+
+        // Output the result
+        System.out.println("Maximum rectangle area: " + result);
+
+        // Close the scanner
+        scanner.close();
+    }
+}

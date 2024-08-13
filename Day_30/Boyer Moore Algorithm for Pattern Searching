@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class PatternSearch {
+
+    // Function to search all occurrences of the pattern in the text
+    public static void search(char[] pat, char[] txt) {
+        int m = pat.length;
+        int n = txt.length;
+
+        // Loop through the text to find matches
+        for (int i = 0; i <= n - m; i++) {
+            int j;
+
+            // For current index i, check if the pattern matches
+            for (j = 0; j < m; j++) {
+                if (txt[i + j] != pat[j]) {
+                    break;
+                }
+            }
+
+            // If the pattern matches, print the starting index
+            if (j == m) {
+                System.out.println("Pattern found at index " + i);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Taking text and pattern as input from the user
+        System.out.println("Enter the text:");
+        String txt = scanner.nextLine();
+
+        System.out.println("Enter the pattern:");
+        String pat = scanner.nextLine();
+
+        // Call the search function
+        search(pat.toCharArray(), txt.toCharArray());
+
+        scanner.close();
+    }
+}

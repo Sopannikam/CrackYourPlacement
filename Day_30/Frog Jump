@@ -1,0 +1,37 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+class Solution {
+    public boolean canCross(int[] stones) {
+        int n = stones.length;
+        if (n == 0 || stones[1] != 1) {
+            return false; 
+        }
+
+        // Create a map to store possible jumps for each stone
+        Map<Integer, Set<Integer>> stoneMap = new HashMap<>();
+        
+        // Initialize the map with the first stone
+        for (int stone : stones) {
+            stoneMap.put(stone, new HashSet<>());
+        }
+        stoneMap.get(stones[0]).add(0); // The frog starts at position 0 with a jump of 0
+
+        // Process each stone
+        for (int stone : stones) {
+            Set<Integer> jumps = stoneMap.get(stone);
+            for (int jump : jumps) {
+                for (int k = jump - 1; k <= jump + 1; k++) {
+                    if (k > 0 && stoneMap.containsKey(stone + k)) {
+                        stoneMap.get(stone + k).add(k);
+                    }
+                }
+            }
+        }
+
+        // Check if the last stone has any valid jump
+        return !stoneMap.get(stones[n - 1]).isEmpty();
+    }
+}

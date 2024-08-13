@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+public class NumberOfIslands {
+
+    // Directions for traversing the matrix: up, down, left, right, and diagonals
+    private static final int[] rowDir = {-1, 1, 0, 0, -1, -1, 1, 1};
+    private static final int[] colDir = {0, 0, -1, 1, -1, 1, -1, 1};
+
+    // Function to check if a cell is within the bounds of the matrix and contains a '1'
+    private static boolean isSafe(int[][] mat, boolean[][] visited, int row, int col) {
+        return (row >= 0) && (row < mat.length) &&
+               (col >= 0) && (col < mat[0].length) &&
+               (mat[row][col] == 1 && !visited[row][col]);
+    }
+
+    // DFS function to mark all connected '1's as visited
+    private static void DFS(int[][] mat, boolean[][] visited, int row, int col) {
+        // Mark the current cell as visited
+        visited[row][col] = true;
+
+        // Recur for all connected neighbors
+        for (int i = 0; i < 8; i++) {
+            int newRow = row + rowDir[i];
+            int newCol = col + colDir[i];
+            if (isSafe(mat, visited, newRow, newCol)) {
+                DFS(mat, visited, newRow, newCol);
+            }
+        }
+    }
+
+    // Function to count the number of islands
+    public static int countIslands(int[][] mat) {
+        if (mat.length == 0) {
+            return 0;
+        }
+
+        int rows = mat.length;
+        int cols = mat[0].length;
+        boolean[][] visited = new boolean[rows][cols];
+        int islandCount = 0;
+
+        // Traverse the matrix
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // If a cell with value 1 is not visited yet, then it's a new island
+                if (mat[i][j] == 1 && !visited[i][j]) {
+                    // Visit all cells in this island and mark them as visited
+                    DFS(mat, visited, i, j);
+                    // Increment the count of islands
+                    islandCount++;
+                }
+            }
+        }
+        return islandCount;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Reading the matrix dimensions
+        System.out.println("Enter the number of rows:");
+        int rows = scanner.nextInt();
+        System.out.println("Enter the number of columns:");
+        int cols = scanner.nextInt();
+
+        // Initialize the matrix
+        int[][] mat = new int[rows][cols];
+
+        // Reading the matrix values
+        System.out.println("Enter the binary matrix row by row:");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat[i][j] = scanner.nextInt();
+            }
+        }
+
+        // Output the number of islands
+        System.out.println("Number of islands: " + countIslands(mat));
+
+        // Close the scanner
+        scanner.close();
+    }
+}

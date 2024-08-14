@@ -1,0 +1,51 @@
+class Solution {
+    // Function to find the minimum number of pages.
+    public static long findPages(int n, int[] arr, int m) {
+        // Edge case: if students are more than books, return -1
+        if (m > n) return -1;
+
+        // Initialize low and high for binary search
+        int low = Integer.MIN_VALUE;
+        int high = 0;
+
+        for (int i = 0; i < n; i++) {
+            high += arr[i];
+            low = Math.max(low, arr[i]);
+        }
+
+        // Binary search to find the minimum maximum pages
+        long result = high;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (isPossible(arr, n, m, mid)) {
+                result = mid; // possible solution found, try for a better minimum
+                high = mid - 1;
+            } else {
+                low = mid + 1; // not possible, try a larger mid
+            }
+        }
+
+        return result;
+    }
+
+    // Helper function to check if it is possible to allocate books within the given max pages
+    private static boolean isPossible(int[] arr, int n, int m, int maxPages) {
+        int studentCount = 1;
+        int currentPages = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (currentPages + arr[i] > maxPages) {
+                studentCount++;
+                currentPages = arr[i];
+
+                // If the number of students required exceeds the given number, return false
+                if (studentCount > m) return false;
+            } else {
+                currentPages += arr[i];
+            }
+        }
+
+        return true;
+    }
+}

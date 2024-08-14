@@ -1,0 +1,56 @@
+public class FloorCeilFinder {
+
+    // Function to find the ceiling of x
+    public static int findCeil(int[] arr, int x) {
+        int low = 0, high = arr.length - 1;
+        int ceil = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == x) {
+                return arr[mid];
+            } else if (arr[mid] < x) {
+                low = mid + 1;
+            } else {
+                ceil = arr[mid];
+                high = mid - 1;
+            }
+        }
+
+        return ceil;
+    }
+
+    // Function to find the floor of x
+    public static int findFloor(int[] arr, int x) {
+        int low = 0, high = arr.length - 1;
+        int floor = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == x) {
+                return arr[mid];
+            } else if (arr[mid] < x) {
+                floor = arr[mid];
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return floor;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 8, 10, 10, 12, 19};
+
+        int x = 5;
+        int floor = findFloor(arr, x);
+        int ceil = findCeil(arr, x);
+
+        System.out.println("For x = " + x + ":");
+        System.out.println("Floor = " + (floor == -1 ? "doesn't exist" : floor));
+        System.out.println("Ceil = " + (ceil == -1 ? "doesn't exist" : ceil));
+    }
+}

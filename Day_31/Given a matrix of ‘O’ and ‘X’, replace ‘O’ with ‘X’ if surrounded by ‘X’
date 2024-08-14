@@ -1,0 +1,78 @@
+import java.util.Scanner;
+
+class Solution {
+    public void replaceSurroundedO(char[][] mat) {
+        if (mat.length == 0) return;
+        int rows = mat.length;
+        int cols = mat[0].length;
+
+        // Step 1: Mark boundary 'O's and connected 'O's
+        for (int i = 0; i < rows; i++) {
+            // Mark first and last column
+            if (mat[i][0] == 'O') markBoundaryConnected(mat, i, 0);
+            if (mat[i][cols - 1] == 'O') markBoundaryConnected(mat, i, cols - 1);
+        }
+        for (int j = 0; j < cols; j++) {
+            // Mark first and last row
+            if (mat[0][j] == 'O') markBoundaryConnected(mat, 0, j);
+            if (mat[rows - 1][j] == 'O') markBoundaryConnected(mat, rows - 1, j);
+        }
+
+        // Step 2: Replace unmarked 'O's with 'X'
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (mat[i][j] == 'O') {
+                    mat[i][j] = 'X';
+                } else if (mat[i][j] == '#') {
+                    mat[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    private void markBoundaryConnected(char[][] mat, int i, int j) {
+        if (i < 0 || i >= mat.length || j < 0 || j >= mat[0].length || mat[i][j] != 'O') {
+            return;
+        }
+        mat[i][j] = '#'; // Mark this 'O' as visited
+        // Explore all 4 directions
+        markBoundaryConnected(mat, i + 1, j);
+        markBoundaryConnected(mat, i - 1, j);
+        markBoundaryConnected(mat, i, j + 1);
+        markBoundaryConnected(mat, i, j - 1);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input matrix dimensions
+        System.out.print("Enter number of rows: ");
+        int rows = sc.nextInt();
+        System.out.print("Enter number of columns: ");
+        int cols = sc.nextInt();
+
+        // Input matrix elements
+        char[][] mat = new char[rows][cols];
+        System.out.println("Enter the matrix elements (X or O):");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                mat[i][j] = sc.next().charAt(0);
+            }
+        }
+
+        // Replace surrounded 'O's with 'X'
+        Solution solution = new Solution();
+        solution.replaceSurroundedO(mat);
+
+        // Output the modified matrix
+        System.out.println("Modified matrix:");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        sc.close();
+    }
+}

@@ -1,0 +1,53 @@
+public class Solution {
+    
+    // Function to compute the total cost for a target value 'y'
+    private static int computeCost(int[] arr, int y) {
+        int cost = 0;
+        for (int num : arr) {
+            cost += Math.abs(num - y);
+        }
+        return cost;
+    }
+
+    // Function to find the minimum cost to make all array elements equal
+    public static int minCost(int[] arr) {
+        int left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
+        
+        // Finding the range for ternary search
+        for (int num : arr) {
+            if (num < left) left = num;
+            if (num > right) right = num;
+        }
+        
+        // Ternary search within the range [left, right]
+        while (right - left > 2) {
+            int mid1 = left + (right - left) / 3;
+            int mid2 = right - (right - left) / 3;
+            
+            int cost1 = computeCost(arr, mid1);
+            int cost2 = computeCost(arr, mid2);
+            
+            if (cost1 < cost2) {
+                right = mid2;
+            } else {
+                left = mid1;
+            }
+        }
+        
+        // Check for the minimum cost in the remaining small range
+        int minCost = Integer.MAX_VALUE;
+        for (int i = left; i <= right; i++) {
+            minCost = Math.min(minCost, computeCost(arr, i));
+        }
+        
+        return minCost;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {1, 100, 101};
+        int[] arr2 = {4, 6};
+        
+        System.out.println(minCost(arr1));  // Output: 100
+        System.out.println(minCost(arr2));  // Output: 2
+    }
+}

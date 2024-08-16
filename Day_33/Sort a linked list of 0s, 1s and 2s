@@ -1,0 +1,94 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class Solution {
+    // Function to sort a linked list of 0s, 1s, and 2s.
+    static Node sortList(Node head) {
+        if (head == null) return null;
+        
+        // Initialize counts of 0, 1, and 2
+        int count[] = {0, 0, 0}; 
+        
+        Node current = head;
+        
+        // Count the number of 0s, 1s, and 2s in the list
+        while (current != null) {
+            count[current.data]++;
+            current = current.next;
+        }
+        
+        current = head;
+        int i = 0;
+        
+        // Overwrite the linked list with the counted numbers
+        while (current != null) {
+            if (count[i] == 0) {
+                i++;
+            } else {
+                current.data = i;
+                count[i]--;
+                current = current.next;
+            }
+        }
+        
+        return head;
+    }
+
+    // Utility function to print the linked list
+    static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        System.out.println("NULL");
+    }
+    
+    // Utility function to add a node at the end
+    static Node addNode(Node head, int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            return newNode;
+        }
+        
+        Node current = head;
+        while (current.next != null) {
+            current = current.next;
+        }
+        current.next = newNode;
+        return head;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Taking input for the linked list
+        System.out.println("Enter the number of nodes:");
+        int n = scanner.nextInt();
+        
+        Node head = null;
+        System.out.println("Enter the values (0, 1, or 2):");
+        for (int i = 0; i < n; i++) {
+            int value = scanner.nextInt();
+            head = addNode(head, value);
+        }
+        
+        System.out.println("Original list:");
+        printList(head);
+        
+        head = sortList(head);
+        
+        System.out.println("Sorted list:");
+        printList(head);
+        
+        scanner.close();
+    }
+}

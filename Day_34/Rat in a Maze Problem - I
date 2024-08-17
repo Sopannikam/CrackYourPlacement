@@ -1,0 +1,58 @@
+class Solution {
+    public ArrayList<String> findPath(int[][] mat) {
+        ArrayList<String> paths = new ArrayList<>();
+        int n = mat.length;
+        
+        // If starting or ending cell is blocked, return an empty list.
+        if (mat[0][0] == 0 || mat[n-1][n-1] == 0) {
+            return paths;
+        }
+        
+        boolean[][] visited = new boolean[n][n];
+        dfs(mat, 0, 0, n, "", visited, paths);
+        
+        // Sort paths in lexicographical order.
+        Collections.sort(paths);
+        return paths;
+    }
+    
+    private void dfs(int[][] mat, int i, int j, int n, String path, boolean[][] visited, ArrayList<String> paths) {
+        // Base case: Reached destination
+        if (i == n - 1 && j == n - 1) {
+            paths.add(path);
+            return;
+        }
+        
+        // Mark this cell as visited
+        visited[i][j] = true;
+        
+        // Possible directions: 'D', 'L', 'R', 'U'
+        // Move Down
+        if (isSafe(mat, i + 1, j, n, visited)) {
+            dfs(mat, i + 1, j, n, path + "D", visited, paths);
+        }
+        
+        // Move Left
+        if (isSafe(mat, i, j - 1, n, visited)) {
+            dfs(mat, i, j - 1, n, path + "L", visited, paths);
+        }
+        
+        // Move Right
+        if (isSafe(mat, i, j + 1, n, visited)) {
+            dfs(mat, i, j + 1, n, path + "R", visited, paths);
+        }
+        
+        // Move Up
+        if (isSafe(mat, i - 1, j, n, visited)) {
+            dfs(mat, i - 1, j, n, path + "U", visited, paths);
+        }
+        
+        // Backtrack: Unmark this cell as visited
+        visited[i][j] = false;
+    }
+    
+    // Helper function to check if the cell (x, y) is valid for the rat to move into.
+    private boolean isSafe(int[][] mat, int x, int y, int n, boolean[][] visited) {
+        return (x >= 0 && x < n && y >= 0 && y < n && mat[x][y] == 1 && !visited[x][y]);
+    }
+}

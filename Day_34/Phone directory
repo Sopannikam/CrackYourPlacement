@@ -1,0 +1,29 @@
+class Solution{
+    static ArrayList<ArrayList<String>> displayContacts(int n, String contact[], String s) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        
+        // Sort contacts lexicographically
+        Arrays.sort(contact);
+        
+        for (int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+            ArrayList<String> matchingContacts = new ArrayList<>();
+            
+            for (String entry : contact) {
+                if (entry.startsWith(prefix)) {
+                    if (!matchingContacts.contains(entry)) {
+                        matchingContacts.add(entry);
+                    }
+                }
+            }
+            
+            if (matchingContacts.isEmpty()) {
+                matchingContacts.add("0");
+            }
+            
+            result.add(matchingContacts);
+        }
+        
+        return result;
+    }
+}

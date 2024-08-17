@@ -1,0 +1,30 @@
+
+class GfG {
+    int maxLen(int arr[], int n) {
+        // HashMap to store the first occurrence of a prefix sum
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int maxLength = 0;
+        int prefixSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            // Add the current element to the prefix sum
+            prefixSum += arr[i];
+
+            // If the prefix sum is zero, the subarray from the start to the current index has sum 0
+            if (prefixSum == 0) {
+                maxLength = i + 1;
+            }
+
+            // If the prefix sum is already present in the map, it means there is a subarray with sum 0
+            if (map.containsKey(prefixSum)) {
+                // Calculate the length of the subarray with sum 0
+                maxLength = Math.max(maxLength, i - map.get(prefixSum));
+            } else {
+                // Store the prefix sum with its index if it's not already present
+                map.put(prefixSum, i);
+            }
+        }
+
+        return maxLength;
+    }
+}

@@ -1,0 +1,24 @@
+class Solution {
+    public static int wordBreak(String A, ArrayList<String> B) {
+        int n = A.length();
+        // Convert the list to a HashSet for faster lookup
+        Set<String> wordDict = new HashSet<>(B);
+        
+        // dp[i] indicates if the string A[0:i] can be segmented
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true; // empty string
+        
+        // Iterate over the string length
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                // Check if the substring A[j:i] is in the dictionary
+                if (dp[j] && wordDict.contains(A.substring(j, i))) {
+                    dp[i] = true;
+                    break; 
+                }
+            }
+        }
+        
+        return dp[n] ? 1 : 0;
+    }
+}

@@ -1,0 +1,61 @@
+
+class Solution {
+    // Possible moves of the knight
+    private static final int[] dx = {-2, -1, 1, 2, 2, 1, -1, -2};
+    private static final int[] dy = {1, 2, 2, 1, -1, -2, -2, -1};
+    
+    // Function to find out minimum steps Knight needs to reach target position.
+    public int minStepToReachTarget(int KnightPos[], int TargetPos[], int N) {
+        // Convert to 0-based indexing
+        int startX = KnightPos[0] - 1;
+        int startY = KnightPos[1] - 1;
+        int targetX = TargetPos[0] - 1;
+        int targetY = TargetPos[1] - 1;
+        
+        // Check if the knight is already at the target
+        if (startX == targetX && startY == targetY) {
+            return 0;
+        }
+        
+        // Queue for BFS, storing positions and the current step count
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{startX, startY, 0});
+        
+        // Visited array to track visited positions
+        boolean[][] visited = new boolean[N][N];
+        visited[startX][startY] = true;
+        
+        // BFS loop
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0];
+            int y = current[1];
+            int steps = current[2];
+            
+            // Explore all 8 possible moves
+            for (int i = 0; i < 8; i++) {
+                int newX = x + dx[i];
+                int newY = y + dy[i];
+                
+                // Check if the new position is within the board and not visited
+                if (isValidMove(newX, newY, N) && !visited[newX][newY]) {
+                    // If we reach the target position
+                    if (newX == targetX && newY == targetY) {
+                        return steps + 1;
+                    }
+                    // Mark the new position as visited and add to the queue
+                    visited[newX][newY] = true;
+                    queue.offer(new int[]{newX, newY, steps + 1});
+                }
+            }
+        }
+        
+        // If we cannot reach the target position
+        return -1;
+    }
+    
+    // Helper function to check if a position is within the board
+    private boolean isValidMove(int x, int y, int N) {
+        return x >= 0 && x < N && y >= 0 && y < N;
+    }
+}

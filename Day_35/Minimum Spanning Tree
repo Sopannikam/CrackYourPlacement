@@ -1,0 +1,54 @@
+
+
+class Solution {
+    static class Edge implements Comparable<Edge> {
+        int vertex;
+        int weight;
+
+        Edge(int vertex, int weight) {
+            this.vertex = vertex;
+            this.weight = weight;
+        }
+
+        public int compareTo(Edge other) {
+            return this.weight - other.weight;
+        }
+    }
+
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Step 1: Initialize the priority queue (min heap) and the visited array
+        PriorityQueue<Edge> minHeap = new PriorityQueue<>();
+        boolean[] visited = new boolean[V];
+
+        // Step 2: Start with vertex 0
+        minHeap.add(new Edge(0, 0));
+        int mstSum = 0;
+
+        // Step 3: Prim's Algorithm
+        while (!minHeap.isEmpty()) {
+            // Get the edge with the minimum weight
+            Edge current = minHeap.poll();
+            int u = current.vertex;
+
+            // If already visited, skip it
+            if (visited[u]) continue;
+
+            // Mark this vertex as visited
+            visited[u] = true;
+            mstSum += current.weight;
+
+            // Add all edges from this vertex to the priority queue
+            for (int[] neighbor : adj.get(u)) {
+                int v = neighbor[0];
+                int weight = neighbor[1];
+
+                if (!visited[v]) {
+                    minHeap.add(new Edge(v, weight));
+                }
+            }
+        }
+
+        // Step 4: Return the total weight of the MST
+        return mstSum;
+    }
+}

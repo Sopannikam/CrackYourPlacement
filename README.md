@@ -5,5 +5,7 @@ This repository contains my solutions to various DSA problems that I'll be tackl
 
 Structure
 Daily Solutions: Each day's solutions are organized in folders (e.g., Day1, Day2, etc.).
+
 Problem Statements: Each folder includes the problem statements and my approach to solving them.
+
 Code: Java code for each solution with explanatory comments.

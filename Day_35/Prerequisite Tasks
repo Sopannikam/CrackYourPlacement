@@ -1,0 +1,46 @@
+
+class Solution {
+    public boolean isPossible(int N, int P, int[][] prerequisites) {
+        // Step 1: Build the graph and compute in-degrees of nodes
+        List<List<Integer>> adj = new ArrayList<>();
+        int[] inDegree = new int[N];
+        
+        for (int i = 0; i < N; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] pre : prerequisites) {
+            int u = pre[1];
+            int v = pre[0];
+            adj.get(u).add(v);
+            inDegree[v]++;
+        }
+        
+        // Step 2: Use Kahn's algorithm (BFS) to detect a cycle
+        Queue<Integer> queue = new LinkedList<>();
+        
+        // Add all nodes with in-degree 0 to the queue
+        for (int i = 0; i < N; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+        int count = 0;
+        
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            count++;
+            
+            for (int neighbor : adj.get(node)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        
+        // If count of processed nodes equals N, all tasks can be completed
+        return count == N;
+    }
+}

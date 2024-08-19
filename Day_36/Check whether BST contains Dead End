@@ -1,0 +1,23 @@
+class Solution
+{
+    public static boolean isDeadEnd(Node root)
+    {
+        // Helper function to check for dead end
+        return isDeadEndHelper(root, 1, Integer.MAX_VALUE);
+    }
+    
+    private static boolean isDeadEndHelper(Node node, int minValue, int maxValue) {
+        if (node == null) {
+            return false;  // No dead end found
+        }
+
+        // If current node's value equals the minValue and maxValue, it's a dead end
+        if (minValue == maxValue) {
+            return true;
+        }
+
+        // Check in the left and right subtrees
+        return isDeadEndHelper(node.left, minValue, node.data - 1) ||
+               isDeadEndHelper(node.right, node.data + 1, maxValue);
+    }
+}

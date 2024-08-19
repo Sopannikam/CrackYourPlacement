@@ -1,0 +1,41 @@
+import java.util.Stack;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { 
+        this.val = val; 
+    }
+}
+
+class BSTIterator {
+    private Stack<TreeNode> stack;
+
+    public BSTIterator(TreeNode root) {
+        stack = new Stack<>();
+        pushLeft(root);
+    }
+
+    // Function to push all left children of the node to the stack
+    private void pushLeft(TreeNode node) {
+        while (node != null) {
+            stack.push(node);
+            node = node.left;
+        }
+    }
+
+    // Function to return the next smallest element in the BST
+    public int next() {
+        TreeNode current = stack.pop();
+        // If there is a right child, push all its left children to the stack
+        if (current.right != null) {
+            pushLeft(current.right);
+        }
+        return current.val;
+    }
+
+    // Function to check if there is a next element in the in-order traversal
+    public boolean hasNext() {
+        return !stack.isEmpty();
+    }
+}

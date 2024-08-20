@@ -1,0 +1,63 @@
+
+class Solution 
+{
+    // Function to find maximum of minimums of every window size.
+    static int[] maxOfMin(int[] arr, int n) 
+    {
+        // Arrays to store previous and next smaller elements
+        int[] prevSmaller = new int[n];
+        int[] nextSmaller = new int[n];
+        
+        // Initialize previous smaller and next smaller arrays
+        for (int i = 0; i < n; i++) {
+            prevSmaller[i] = -1;
+            nextSmaller[i] = n;
+        }
+        
+        // Fill previous smaller array using a stack
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            if (!stack.isEmpty()) {
+                prevSmaller[i] = stack.peek();
+            }
+            stack.push(i);
+        }
+        
+        // Clear the stack and fill next smaller array
+        stack.clear();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            if (!stack.isEmpty()) {
+                nextSmaller[i] = stack.peek();
+            }
+            stack.push(i);
+        }
+        
+        // Result array to store the maximum of minimums for every window size
+        int[] result = new int[n + 1];
+        
+        // Fill the result array
+        for (int i = 0; i < n; i++) {
+            // Length of the window where arr[i] is the minimum
+            int len = nextSmaller[i] - prevSmaller[i] - 1;
+            // Update the result array for window size 'len'
+            result[len] = Math.max(result[len], arr[i]);
+        }
+        
+        // Propagate the maximum values to smaller window sizes
+        for (int i = n - 1; i >= 1; i--) {
+            result[i] = Math.max(result[i], result[i + 1]);
+        }
+        
+        // Remove the extra element at index 0 (not needed)
+        int[] finalResult = new int[n];
+        System.arraycopy(result, 1, finalResult, 0, n);
+        
+        return finalResult;
+    }
+}

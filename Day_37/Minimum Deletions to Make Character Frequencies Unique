@@ -1,0 +1,31 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public int minDeletions(String s) {
+        int[] freq = new int[26];
+        
+        // Count frequency of each character
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+        
+        Set<Integer> seenFrequencies = new HashSet<>();
+        int deletions = 0;
+        
+        // Iterate over each character frequency
+        for (int i = 0; i < 26; i++) {
+            while (freq[i] > 0 && seenFrequencies.contains(freq[i])) {
+                // If the frequency is already seen, reduce it
+                freq[i]--;
+                deletions++;
+            }
+            // Add the frequency to the set if it's greater than 0
+            if (freq[i] > 0) {
+                seenFrequencies.add(freq[i]);
+            }
+        }
+        
+        return deletions;
+    }
+}

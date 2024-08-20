@@ -1,0 +1,58 @@
+
+//User function Template for Java
+class Tree {
+    // Helper method to count the total number of nodes in the BST
+    private int countNodes(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+    
+    // Helper method to find the kth node in an inorder traversal
+    private void findKth(Node root, int k, int[] count, int[] result) {
+        if (root == null || result[0] != -1) {
+            return;
+        }
+        
+        // Traverse left subtree
+        findKth(root.left, k, count, result);
+        
+        // Increment count and check if current node is the kth node
+        count[0]++;
+        if (count[0] == k) {
+            result[0] = root.data;
+            return;
+        }
+        
+        // Traverse right subtree
+        findKth(root.right, k, count, result);
+    }
+
+    public static float findMedian(Node root) {
+        Tree tree = new Tree();
+        
+        // Step 1: Count the total number of nodes in the BST
+        int n = tree.countNodes(root);
+        
+        // Step 2: Find the median
+        if (n % 2 == 1) {
+            // If odd, find the middle node
+            int[] result = new int[1];
+            result[0] = -1;
+            tree.findKth(root, (n + 1) / 2, new int[1], result);
+            return result[0];
+        } else {
+            // If even, find the average of the two middle nodes
+            int[] result1 = new int[1];
+            result1[0] = -1;
+            tree.findKth(root, n / 2, new int[1], result1);
+            
+            int[] result2 = new int[1];
+            result2[0] = -1;
+            tree.findKth(root, (n / 2) + 1, new int[1], result2);
+            
+            return (result1[0] + result2[0]) / 2.0f;
+        }
+    }
+}

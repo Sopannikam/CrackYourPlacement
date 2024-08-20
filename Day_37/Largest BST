@@ -1,0 +1,37 @@
+class Solution {
+    
+    // A static index to be used across recursive calls
+    int index = 0;
+    
+    Node constructTree(int n, int pre[], char preLN[]) {
+        // Call the recursive helper function to construct the tree
+        return constructTreeUtil(pre, preLN, n);
+    }
+    
+    private Node constructTreeUtil(int[] pre, char[] preLN, int n) {
+        // Base case: If index is greater or equal to n, return null
+        if (index >= n) {
+            return null;
+        }
+        
+        // Create a new node with the current value in pre[] array
+        Node node = new Node(pre[index]);
+        
+        // Store the current index in a temporary variable
+        int currIndex = index;
+        
+        // Increment index for the next recursive call
+        index++;
+        
+        // If the current node is not a leaf node (i.e., preLN[currIndex] == 'N'),
+        // recursively construct the left and right subtrees
+        if (preLN[currIndex] == 'N') {
+            node.left = constructTreeUtil(pre, preLN, n);
+            node.right = constructTreeUtil(pre, preLN, n);
+        }
+        
+        // If the current node is a leaf node (i.e., preLN[currIndex] == 'L'),
+        // simply return the node (no need to construct left or right children)
+        return node;
+    }
+}

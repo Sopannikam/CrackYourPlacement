@@ -1,0 +1,23 @@
+
+class Solution {
+    // Function to count the number of nodes in BST that lie in the given range.
+    int getCount(Node root, int l, int h) {
+        // Base Case
+        if (root == null) {
+            return 0;
+        }
+
+        // Current node's value is within the range
+        if (root.data >= l && root.data <= h) {
+            return 1 + getCount(root.left, l, h) + getCount(root.right, l, h);
+        }
+        // Current node's value is less than the range's lower bound
+        else if (root.data < l) {
+            return getCount(root.right, l, h);
+        }
+        // Current node's value is greater than the range's upper bound
+        else {
+            return getCount(root.left, l, h);
+        }
+    }
+}

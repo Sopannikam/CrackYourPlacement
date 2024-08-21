@@ -1,0 +1,27 @@
+
+class Solution {
+    // Function to find the starting point where the truck can start to get through
+    // the complete circle without exhausting its petrol in between.
+    int tour(int petrol[], int distance[]) {
+        int n = petrol.length;
+        int total_balance = 0;  // Total balance of petrol vs distance
+        int current_balance = 0;  // Current balance while traversing
+        int start = 0;  // Start index for the tour
+        
+        for (int i = 0; i < n; i++) {
+            int diff = petrol[i] - distance[i];
+            total_balance += diff;
+            current_balance += diff;
+            
+            // If current balance is negative, this index cannot be the starting point
+            if (current_balance < 0) {
+                // Start from the next petrol pump
+                start = i + 1;
+                current_balance = 0;  // Reset current balance
+            }
+        }
+        
+        // If total balance is non-negative, return the start index
+        return total_balance >= 0 ? start : -1;
+    }
+}

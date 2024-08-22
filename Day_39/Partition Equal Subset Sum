@@ -1,0 +1,38 @@
+
+class Solution {
+    public int equalPartition(int N, int arr[]) {
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            sum += arr[i];
+        }
+
+        // If the sum is odd, we can't partition it into two equal subsets
+        if (sum % 2 != 0) {
+            return 0;
+        }
+
+        // Target is half of the total sum
+        int target = sum / 2;
+
+        // DP array to store whether a sum is possible with the first i elements
+        boolean[][] dp = new boolean[N + 1][target + 1];
+
+        // Initialize: with 0 items, only sum of 0 is possible
+        for (int i = 0; i <= N; i++) {
+            dp[i][0] = true;
+        }
+
+        // Fill the dp array
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= target; j++) {
+                dp[i][j] = dp[i - 1][j]; // Exclude current element
+                if (j >= arr[i - 1]) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]]; // Include current element
+                }
+            }
+        }
+
+        // The answer is whether we can achieve the target sum with all N elements
+        return dp[N][target] ? 1 : 0;
+    }
+}

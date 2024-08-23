@@ -1,0 +1,84 @@
+import java.util.*;
+
+class WaterJugProblem {
+
+    // Class to represent a state of the jugs
+    static class State {
+        int x, y;
+        List<State> path;
+
+        State(int x, int y, List<State> path) {
+            this.x = x;
+            this.y = y;
+            this.path = new ArrayList<>(path);
+            this.path.add(this);
+        }
+    }
+
+    // BFS function to solve the water jug problem
+    public static void solveWaterJug(int m, int n, int d) {
+        // Base case
+        if (d > m && d > n) {
+            System.out.println("No solution possible");
+            return;
+        }
+
+        // Set to keep track of visited states
+        Set<String> visited = new HashSet<>();
+
+        // Queue for BFS
+        Queue<State> queue = new LinkedList<>();
+        queue.add(new State(0, 0, new ArrayList<>()));
+
+        while (!queue.isEmpty()) {
+            State current = queue.poll();
+            int x = current.x;
+            int y = current.y;
+
+            // If we reach the solution state
+            if (x == d || y == d) {
+                printSolution(current.path);
+                return;
+            }
+
+            // Mark this state as visited
+            visited.add(x + "," + y);
+
+            // Generate all possible next states
+            List<State> nextStates = Arrays.asList(
+                    new State(m, y, current.path), // Fill Jug1
+                    new State(x, n, current.path), // Fill Jug2
+                    new State(0, y, current.path), // Empty Jug1
+                    new State(x, 0, current.path), // Empty Jug2
+                    new State(x - Math.min(x, n - y), y + Math.min(x, n - y), current.path), // Pour Jug1 -> Jug2
+                    new State(x + Math.min(y, m - x), y - Math.min(y, m - x), current.path)  // Pour Jug2 -> Jug1
+            );
+
+            // Process each possible state
+            for (State nextState : nextStates) {
+                String key = nextState.x + "," + nextState.y;
+                if (!visited.contains(key)) {
+                    queue.add(nextState);
+                }
+            }
+        }
+
+        System.out.println("No solution possible");
+    }
+
+    // Function to print the solution path
+    private static void printSolution(List<State> path) {
+        System.out.println("Solution path:");
+        for (State state : path) {
+            System.out.println("(" + state.x + ", " + state.y + ")");
+        }
+    }
+
+    public static void main(String[] args) {
+        int m = 4; // Capacity of Jug1
+        int n = 3; // Capacity of Jug2
+        int d = 2; // Desired amount of water
+
+        solveWaterJug(m, n, d);
+    }
+}

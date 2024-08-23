@@ -1,0 +1,213 @@
+import java.lang.*;
+
+class GFG {
+
+    // Class for a node of deque
+    static class DQueNode {
+        int value;
+        DQueNode next;
+        DQueNode prev;
+    }
+
+    // Implementation of deque class
+    static class Deque {
+
+        // Pointers to head and tail of deque
+        private DQueNode head;
+        private DQueNode tail;
+
+        // Constructor
+        public Deque() {
+            head = tail = null;
+        }
+
+        // Check if the deque is empty
+        boolean isEmpty() {
+            return head == null;
+        }
+
+        // Count the number of nodes in the deque
+        int size() {
+            if (!isEmpty()) {
+                DQueNode temp = head;
+                int len = 0;
+
+                while (temp != null) {
+                    len++;
+                    temp = temp.next;
+                }
+                return len;
+            }
+            return 0;
+        }
+
+        // Insert at the first position
+        void insertFirst(int element) {
+            DQueNode temp = new DQueNode();
+            temp.value = element;
+
+            if (head == null) { // If the deque is empty
+                head = tail = temp;
+                temp.next = temp.prev = null;
+            } else {
+                head.prev = temp;
+                temp.next = head;
+                temp.prev = null;
+                head = temp;
+            }
+        }
+
+        // Insert at the last position
+        void insertLast(int element) {
+            DQueNode temp = new DQueNode();
+            temp.value = element;
+
+            if (head == null) { // If the deque is empty
+                head = tail = temp;
+                temp.next = temp.prev = null;
+            } else {
+                tail.next = temp;
+                temp.next = null;
+                temp.prev = tail;
+                tail = temp;
+            }
+        }
+
+        // Remove element at the first position
+        public void removeFirst() {
+            if (!isEmpty()) {
+                if (head == tail) { // Only one element
+                    head = tail = null;
+                } else {
+                    head = head.next;
+                    head.prev = null;
+                }
+            } else {
+                System.out.println("Deque is Empty");
+            }
+        }
+
+        // Remove element at the last position
+        void removeLast() {
+            if (!isEmpty()) {
+                if (head == tail) { // Only one element
+                    head = tail = null;
+                } else {
+                    tail = tail.prev;
+                    tail.next = null;
+                }
+            } else {
+                System.out.println("Deque is Empty");
+            }
+        }
+
+        // Display the elements in the deque
+        void display() {
+            if (!isEmpty()) {
+                DQueNode temp = head;
+                while (temp != null) {
+                    System.out.print(temp.value + " ");
+                    temp = temp.next;
+                }
+            } else {
+                System.out.println("Deque is Empty");
+            }
+        }
+    }
+
+    // Class to implement stack using Deque
+    static class Stack {
+        Deque d = new Deque();
+
+        // Push element to top of the stack
+        public void push(int element) {
+            d.insertLast(element);
+        }
+
+        // Pop element from top of the stack
+        public void pop() {
+            d.removeLast();
+        }
+
+        // Return size of stack
+        public int size() {
+            return d.size();
+        }
+
+        // Display elements in stack
+        public void display() {
+            d.display();
+        }
+    }
+
+    // Class to implement queue using Deque
+    static class Queue {
+        Deque d = new Deque();
+
+        // Enqueue element to the queue
+        public void enqueue(int element) {
+            d.insertLast(element);
+        }
+
+        // Dequeue element from the queue
+        public void dequeue() {
+            d.removeFirst();
+        }
+
+        // Return size of queue
+        public int size() {
+            return d.size();
+        }
+
+        // Display elements in queue
+        public void display() {
+            d.display();
+        }
+    }
+
+    // Driver Code
+    public static void main(String[] args) {
+
+        // Object of Stack
+        Stack stk = new Stack();
+
+        // Push 7 and 8 at top of stack
+        stk.push(7);
+        stk.push(8);
+        System.out.print("Stack: ");
+        stk.display(); // Stack: 7 8 
+
+        // For new line
+        System.out.println();
+
+        // Pop an element
+        stk.pop();
+        System.out.print("Stack: ");
+        stk.display(); // Stack: 7
+
+        // For new line
+        System.out.println();
+
+        // Object of Queue
+        Queue que = new Queue();
+
+        // Insert 12 and 13 in queue
+        que.enqueue(12);
+        que.enqueue(13);
+        System.out.print("Queue: ");
+        que.display(); // Queue: 12 13
+
+        // New line
+        System.out.println();
+
+        // Delete an element from queue
+        que.dequeue();
+        System.out.print("Queue: ");
+        que.display(); // Queue: 13
+
+      
+        System.out.println();
+        System.out.println("Size of stack is " + stk.size()); 
+        System.out.println("Size of queue is " + que.size()); 
+    }
+}

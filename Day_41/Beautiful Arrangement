@@ -1,0 +1,26 @@
+class Solution {
+    public int countArrangement(int n) {
+        boolean[] visited = new boolean[n + 1]; // To track visited numbers
+        return countBeautifulArrangements(n, 1, visited);
+    }
+
+    private int countBeautifulArrangements(int n, int pos, boolean[] visited) {
+        // Base case: if we've placed all numbers correctly
+        if (pos > n) {
+            return 1;
+        }
+        
+        int count = 0;
+        
+        // Try placing each number at position 'pos'
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i] && (i % pos == 0 || pos % i == 0)) {
+                visited[i] = true;
+                count += countBeautifulArrangements(n, pos + 1, visited);
+                visited[i] = false; // Backtrack
+            }
+        }
+        
+        return count;
+    }
+}

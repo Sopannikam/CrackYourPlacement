@@ -1,0 +1,51 @@
+
+class solve {
+  
+    public boolean graphColoring(boolean graph[][], int m, int n) {
+        int[] color = new int[n]; // Array to store color assignments for vertices.
+        // Initialize all vertices with 0 color (no color assigned yet).
+        for (int i = 0; i < n; i++) {
+            color[i] = 0;
+        }
+        // Start coloring from the first vertex (index 0).
+        return canColorGraph(0, graph, color, m, n);
+    }
+
+    // Recursive function to solve the problem using backtracking.
+    private boolean canColorGraph(int vertex, boolean[][] graph, int[] color, int m, int n) {
+        // Base case: If all vertices have been assigned a color, return true.
+        if (vertex == n) {
+            return true;
+        }
+        
+        // Try assigning each color from 1 to m.
+        for (int c = 1; c <= m; c++) {
+            if (isSafeToColor(vertex, graph, color, c, n)) {
+                // Assign the color c to the vertex.
+                color[vertex] = c;
+                
+                // Recursively try coloring the next vertex.
+                if (canColorGraph(vertex + 1, graph, color, m, n)) {
+                    return true;
+                }
+                
+                // If assigning color c doesn't lead to a solution, backtrack.
+                color[vertex] = 0;
+            }
+        }
+        
+        // If no color assignment works, return false.
+        return false;
+    }
+
+    // Function to check if it's safe to color a vertex with a given color.
+    private boolean isSafeToColor(int vertex, boolean[][] graph, int[] color, int c, int n) {
+        for (int i = 0; i < n; i++) {
+            // Check if any adjacent vertex has the same color.
+            if (graph[vertex][i] && color[i] == c) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

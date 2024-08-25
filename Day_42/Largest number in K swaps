@@ -1,0 +1,58 @@
+
+class Solution {
+    private String maxNumber;
+
+    // Function to find the largest number after k swaps.
+    public String findMaximumNum(String str, int k) {
+        maxNumber = str; // Initialize with the original number as the max
+        findMaximumNumHelper(str.toCharArray(), k, 0);
+        return maxNumber;
+    }
+
+    private void findMaximumNumHelper(char[] str, int k, int index) {
+        if (k == 0 || index >= str.length) {
+            return;
+        }
+
+        int n = str.length;
+        char maxChar = str[index];
+
+        // Find the maximum digit in the remaining string
+        for (int i = index + 1; i < n; i++) {
+            if (str[i] > maxChar) {
+                maxChar = str[i];
+            }
+        }
+
+        // If the current digit is not the largest one, we must swap it
+        if (maxChar != str[index]) {
+            k--;
+        }
+
+        for (int i = index; i < n; i++) {
+            // Only swap when the digit is the maxChar
+            if (str[i] == maxChar) {
+                // Swap the current digit with the found maximum digit
+                swap(str, index, i);
+
+                // Check if the new number is the maximum
+                String currentNumber = new String(str);
+                if (currentNumber.compareTo(maxNumber) > 0) {
+                    maxNumber = currentNumber;
+                }
+
+                // Recur for the next index
+                findMaximumNumHelper(str, k, index + 1);
+
+                // Backtrack to the previous state
+                swap(str, index, i);
+            }
+        }
+    }
+
+    private void swap(char[] str, int i, int j) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}

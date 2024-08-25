@@ -1,0 +1,35 @@
+
+class Solution {
+    static ArrayList<ArrayList<String>> allPalindromicPerms(String S) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        ArrayList<String> currentPartition = new ArrayList<>();
+        findPartitions(0, S, currentPartition, result);
+        return result;
+    }
+
+    static void findPartitions(int start, String S, ArrayList<String> currentPartition, ArrayList<ArrayList<String>> result) {
+        if (start == S.length()) {
+            result.add(new ArrayList<>(currentPartition));
+            return;
+        }
+
+        for (int end = start; end < S.length(); end++) {
+            if (isPalindrome(S, start, end)) {
+                currentPartition.add(S.substring(start, end + 1));
+                findPartitions(end + 1, S, currentPartition, result);
+                currentPartition.remove(currentPartition.size() - 1); // backtrack
+            }
+        }
+    }
+
+    static boolean isPalindrome(String S, int start, int end) {
+        while (start < end) {
+            if (S.charAt(start) != S.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+}

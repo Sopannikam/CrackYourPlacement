@@ -1,0 +1,74 @@
+
+class twoStacks {
+    int[] arr;  
+    int size;   
+    int top1;  
+    int top2;  
+
+    // Constructor to initialize the two stacks
+    twoStacks(int n) {
+        size = n;
+        arr = new int[n];
+        top1 = -1;       
+        top2 = n;    
+    }
+
+    // Function to push an integer into the stack1
+    void push1(int x) {
+        // Check if there is space between the two tops
+        if (top1 < top2 - 1) {
+            top1++;
+            arr[top1] = x;
+        } else {
+            System.out.println("Stack Overflow");
+        }
+    }
+
+    // Function to push an integer into the stack2
+    void push2(int x) {
+        // Check if there is space between the two tops
+        if (top1 < top2 - 1) {
+            top2--;
+            arr[top2] = x;
+        } else {
+            System.out.println("Stack Overflow");
+        }
+    }
+
+    // Function to remove an element from the top of stack1
+    int pop1() {
+        if (top1 >= 0) {
+            int x = arr[top1];
+            top1--;
+            return x;
+        } else {
+            return -1;  // Return -1 if stack1 is empty
+        }
+    }
+
+    // Function to remove an element from the top of stack2
+    int pop2() {
+        if (top2 < size) {
+            int x = arr[top2];
+            top2++;
+            return x;
+        } else {
+            return -1;  // Return -1 if stack2 is empty
+        }
+    }
+}
+
+public class TwoStack {
+    public static void main(String[] args) {
+        // Create a twoStacks object with a size of 5
+        twoStacks ts = new twoStacks(5);
+
+        ts.push1(2);  
+        ts.push1(3);  
+        ts.push2(4);  
+
+        System.out.println(ts.pop1());  
+        System.out.println(ts.pop2());  
+        System.out.println(ts.pop2());  
+    }
+}

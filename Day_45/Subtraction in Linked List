@@ -1,0 +1,123 @@
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class LinkedListSubtraction {
+
+    // Function to subtract two linked lists
+    public static Node subtractLinkedLists(Node l1, Node l2) {
+        // Reverse both lists to simplify the subtraction process
+        l1 = reverseList(l1);
+        l2 = reverseList(l2);
+
+        Node resultHead = null;
+        Node current = null;
+        int borrow = 0;
+
+        while (l1 != null) {
+            int num1 = l1.data - borrow;
+            int num2 = (l2 != null) ? l2.data : 0;
+
+            if (num1 < num2) {
+                num1 += 10;
+                borrow = 1;
+            } else {
+                borrow = 0;
+            }
+
+            int diff = num1 - num2;
+
+            Node newNode = new Node(diff);
+
+            if (resultHead == null) {
+                resultHead = newNode;
+                current = newNode;
+            } else {
+                current.next = newNode;
+                current = current.next;
+            }
+
+            l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
+        }
+
+        // Reverse the result list to get the final answer
+        resultHead = reverseList(resultHead);
+
+        // Remove leading zeros
+        while (resultHead != null && resultHead.data == 0) {
+            resultHead = resultHead.next;
+        }
+
+        // If result is empty, return a single node with value 0
+        return (resultHead == null) ? new Node(0) : resultHead;
+    }
+
+    // Function to reverse a linked list
+    public static Node reverseList(Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+
+    // Function to print the linked list
+    public static void printList(Node head) {
+        while (head != null) {
+            System.out.print(head.data);
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    // Helper function to create a linked list from an integer array
+    public static Node createList(int[] arr) {
+        Node head = null;
+        Node current = null;
+
+        for (int num : arr) {
+            Node newNode = new Node(num);
+
+            if (head == null) {
+                head = newNode;
+                current = newNode;
+            } else {
+                current.next = newNode;
+                current = current.next;
+            }
+        }
+        return head;
+    }
+
+    public static void main(String[] args) {
+        int[] num1 = {9, 4, 6, 2}; 
+        int[] num2 = {6, 8, 4};    
+
+        Node l1 = createList(num1);
+        Node l2 = createList(num2);
+
+        System.out.print("Number 1: ");
+        printList(l1);
+
+        System.out.print("Number 2: ");
+        printList(l2);
+
+        Node result = subtractLinkedLists(l1, l2);
+
+        System.out.print("Subtraction Result: ");
+        printList(result);
+    }
+}
